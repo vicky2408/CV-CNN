@@ -7,15 +7,19 @@
 %         The dimension of data is m*m*channels*(sample numbers) while m is the size of samples. 
 %         The label is encoded in one-hot form while the one is insteaded by 1+1*j.
 %  Output: train & val accuracy; test output
+%  Note: CV-CNN uses randomness, such as initializing random weights, so training the same network will obtain slightly different results.
+%          Run the network several times, then select the optimal model.
 %  Reference: https://github.com/rasmusbergpalm/DeepLearnToolbox 
 %             This code is created based on the architecture of the reference.
 %  Date: July.22, 2017
 %*****************************************************************
 clear all; close all; clc;  
-addpath('./utils');   
-load train_data.mat;load train_label.mat;    % Please input your testing data and label
-load val_data.mat;load val_label.mat;
-load test_data.mat;
+addpath('./utils'); 
+addpath('../data preparation');
+% You can input your own testing data and label
+% dataset_cv_cnn.mat is produced in data preparation folder
+load dataset_cv_cnn.mat;        
+
 %% CV-CNN architecture
 cnn.layers = {  
     struct('type', 'i')                                     %input layer  
@@ -41,6 +45,7 @@ cnn = cv_cnn_train(cnn,train_data, train_label, opts);
 % test
 net = cv_cnn_ff(cnn,test_data);
 test_img_oo = net.o;
+save test_img_oo test_img_oo -v7.3;
 
 %plot mean squared error  
 plot(cnn.rL);  
