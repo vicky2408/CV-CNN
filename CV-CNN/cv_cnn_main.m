@@ -3,22 +3,23 @@
 %               train & test process
 %               The wights and inputs are all complex. The foraward operations are calculated in complex domain 
 %               and the backward update are based on complex back-propagation formula.
-%  Input: train_data,train_label,val_data,val_label,test_data
+%  Input: dataset.mat including -- (the following 5 matrixs are saved as dataset.mat)
+%         train_data,train_label,val_data,val_label,test_data
 %         The dimension of data is m*m*channels*(sample numbers) while m is the size of samples. 
 %         The label is encoded in one-hot form while the one is insteaded by 1+1*j.
 %  Output: train & val accuracy; test output
 %  Note: CV-CNN uses randomness, such as initializing random weights, so training the same network will obtain slightly different results.
-%          Run the network several times, then select the optimal model.
+%        Run the network several times, then select the optimal model.
 %  Reference: https://github.com/rasmusbergpalm/DeepLearnToolbox 
 %             This code is created based on the architecture of the reference.
 %  Date: July.22, 2017
 %*****************************************************************
 clear all; close all; clc;  
 addpath('./utils'); 
-addpath('../data preparation');
-% You can input your own testing data and label
-% dataset_cv_cnn.mat is produced in data preparation folder
-load dataset_cv_cnn.mat;        
+%input your own testing data and label, the data format is described in the Input
+disp('Please input your dataset...');
+[filename, pathname] = uigetfile( { '*.mat';'MAT-files'; 'Please input your dataset'});
+load([pathname filename]);
 
 %% CV-CNN architecture
 cnn.layers = {  
